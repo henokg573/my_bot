@@ -1,11 +1,24 @@
 import telebot
+import os
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 from telebot import types
-# Replace with your bot token
-TOKEN = '7759515826:AAGHewWCg-91lJwKYdyQONGYKH4jngCpsxs'
-ADMIN_CHAT_ID = '793034140'
-bot = telebot.TeleBot(TOKEN)
+from dotenv import load_dotenv
+# Load environment variables from .env file
+load_dotenv()
 
+# Access the API key from the environment
+API_KEY = os.getenv("API_KEY")
+ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id")
+
+bot = telebot.TeleBot(API_KEY)
+
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Access the API key from the environment
+API_KEY = os.getenv("API_KEY")
+ADMIN_CHAT_ID  = os.getenv("ADMIN_CHAT_Id")
 # Temporary storage for user data
 user_data = {}
 pending_verifications = {}
@@ -27,11 +40,11 @@ def start_registration(message):
         Welcome to EasyGate! Your Gateway to Global Opportunities.
 
 We specialize in:
-📚 Scholarship and admissions
-🌍 Passport and visa applications
-💼 Career and e-commerce services
-✈️ Travel consultancy
-🎓 Online courses and tests
+ Scholarship and admissions
+ Passport and visa applications
+ Career and e-commerce services
+ Travel consultancy
+ Online courses and tests
 
 Select a service to proceed:""",
         reply_markup=main_menu_markup()
@@ -42,7 +55,7 @@ Select a service to proceed:""",
 def handle_menu_choice(message):
     if message.text == "Feedback":
         feedback_menu(message)
-        bot.reply_to(message, "Please provide your feedback. It will be sent to the admin.", reply_markup=main_menu_markup())
+        # bot.reply_to(message, "Please provide your feedback. It will be sent to the admin.", reply_markup=main_menu_markup())
     elif message.text == "About us":
         about_us(message)
     elif message.text == "Our services":
@@ -63,7 +76,7 @@ def handle_help(message):
 # Command handler for /service
 @bot.message_handler(commands=['service'])
 def handle_service(message):
-    bot.reply_to(message, """💼 Our Services:
+    bot.reply_to(message, """ Our Services:
     1️⃣ Embassy Interview Assistance
     2️⃣ Document Review
     3️⃣ Travel Advice
@@ -86,9 +99,7 @@ def handle_contact(message):
     - Phone: +251964255107
     - Telegram: @easygate2""")
 # Default handler for unrecognized inputs
-@bot.message_handler(func=lambda message: True)
-def handle_invalid_input(message):
-    bot.reply_to(message, "⚠️ Invalid input. Please use the correct buttons below or type '/help' to view available commands.", reply_markup=main_menu_markup())
+
 # Feedback menu
 def feedback_menu(message):
     markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
@@ -121,12 +132,20 @@ Welcome to EasyGate!
 # Our Services information
 def our_services(message):
     bot.reply_to(message, """
-💼 **Our Services**:
-1️⃣ Embassy interview coaching
-2️⃣ Visa application assistance
-3️⃣ Study abroad consultancy
-4️⃣ Career guidance
-...and more!
+ Our Services:
+    1️⃣ Embassy Interview Assistance
+    2️⃣ Document Review
+    3️⃣ Travel Advice
+    4️⃣ Visa Application Assistance
+    5️⃣ Scholarship Opportunities
+    6️⃣ English Proficiency Test Preparation
+    7️⃣ Passport Services
+    8️⃣ E-Visa Applications
+    9️⃣ International Payments
+    🔟 International Career Opportunities
+    1️⃣1️⃣ Recommend Educational Travel Consultancies
+    1️⃣2️⃣ Assistance with Any Embassy Interview Practice
+    1️⃣3️⃣ Other Services
 
 📞 Contact us to learn more.
     """, reply_markup=main_menu_markup())
@@ -156,6 +175,7 @@ def handle_feedback_choice(message):
     elif message.text == "Feedback using Telegram Bot":
         bot.reply_to(message, "Please provide your feedback. It will be sent to the admin.")
         bot.register_next_step_handler(message, collect_feedback)
+        bot.reply_to(message, "Thank you for your feedback! It has been sent to the admin.", reply_markup=main_menu_markup())
     elif message.text == "Main Menu":
         bot.reply_to(message, "Returning to main menu...", reply_markup=main_menu_markup())
 
